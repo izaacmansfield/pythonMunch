@@ -14,7 +14,7 @@ class User:
         self.password_hash = hashlib.sha256(password.encode()).hexdigest()
         self.calories_consumed = 0
 
-class CalorieCounter:
+class CalorieCounter():
     def __init__(self, master):
         self.master = master
         master.title("Calorie Counter")
