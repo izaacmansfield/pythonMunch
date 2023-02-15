@@ -43,31 +43,73 @@ class CalorieCounterApp(tk.Tk):
         self.logout_button.pack()
         
     def login(self):
+        with open("users.json") as f:
+            users = json.load(f)
+        # Get the entered username and password
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+    
         # Check if the username and password are correct
-        # Set self.logged_in to True if successful
-        # Store the username in self.username
-        # If login is successful, switch to the calorie counter screen
-        pass
+        if username in users and password == users[username]:
+            self.logged_in = True
+            self.username = username
+            self.login_frame.pack_forget() # hide the login screen
+            self.calorie_counter_frame.pack() # show the calorie counter screen
+            self.update_progress_bar() # initialize the progress bar
+        else:
+            # Display an error message if the username or password is incorrect
+            error_label = tk.Label(self.login_frame, text="Incorrect username or password")
+            error_label.pack()
     
     def logout(self):
-        # Set self.logged_in to False
-        # Clear the username
-        # Switch to the login screen
-        pass
+        self.logged_in = False
+        self.username = ""
+        self.calorie_counter_frame.pack_forget() # hide the calorie counter screen
+        self.login_frame.pack() # show the login screen
         
     def log_calories(self):
-        # Get the food and calorie inputs from the user
-        # Store them in a dictionary
-        # Add the dictionary to a list of logs
-        # Write the list of logs to a JSON file
-        # Update the progress bar based on the total calories logged so far
-        pass
+        # Get the entered food and calorie information
+        food = self.food_entry.get()
+        calories = int(self.calories_entry.get())
+        
+        # Add the calories to the user's existing total
+        with open("users.json", "r+") as f:
+            users = json.load(f)
+            if self.username in users:
+                users[self.username]["total_calories"] += calories
+            else:
+                users[self.username] = {"password": "", "total_calories": calories}
+            f.seek(0)
+            json.dump(users, f)
+        
+        # Add the food and calorie information to the listbox
+        self.log_listbox.insert(tk.END, f"{food}: {calories} calories")
+        
+        # Clear the entry fields
+        self.food_entry.delete(0, tk.END)
+        self.calorie_entry.delete(0, tk.END)
+        
+        # Update the progress bar
+        self.update_progress_bar()
+
     
     def update_progress_bar(self):
-        # Get the total calories logged so far from the JSON file
-        # Calculate the percentage of the daily goal reached
-        # Update the progress bar with the percentage
-        pass
+        # Calculate the percentage of the user's calorie goal that has been reached
+        progress = int(self.logged_calories / self.calorie_goal * 100)
+
+        # Update the progress bar value and label
+        self.progress_bar["value"] = progress
+        self.calories_label["text"] = f"{self.logged_calories}/{self.calorie_goal} calories"
+
+        # Update the progress bar style based on the percentage of the goal reached
+        if progress <= 50:
+            self.progress_bar["style"] = "green.Horizontal.TProgressbar"
+        elif progress > 50 and progress <= 100:
+            self.progress_bar["style"] = "yellow.Horizontal.TProgressbar"
+        else:
+            self.progress_bar["style"] = "red.Horizontal.TProgressbar"
+
+
     
 if __name__ == "__main__":
     app = CalorieCounterApp()
