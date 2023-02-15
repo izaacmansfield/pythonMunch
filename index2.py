@@ -9,6 +9,19 @@ class CalorieCounterApp(tk.Tk):
         self.logged_in = False
         self.username = ""
         
+        # Define the user database filename
+        self.user_db_filename = "users.json"
+
+        # Load the user database
+        with open(self.user_db_filename, "r") as f:
+            self.users = json.load(f)
+
+        # Define the current user variable
+        self.current_user = ""
+        self.username = None
+        self.calorie_goal = 2000
+        self.logged_calories = 0
+
         # Create login screen
         self.login_frame = tk.Frame(self)
         self.username_label = tk.Label(self.login_frame, text="Username:")
@@ -68,29 +81,7 @@ class CalorieCounterApp(tk.Tk):
         self.login_frame.pack() # show the login screen
         
     def log_calories(self):
-        # Get the entered food and calorie information
-        food = self.food_entry.get()
-        calories = int(self.calories_entry.get())
-        
-        # Add the calories to the user's existing total
-        with open("users.json", "r+") as f:
-            users = json.load(f)
-            if self.username in users:
-                users[self.username]["total_calories"] += calories
-            else:
-                users[self.username] = {"password": "", "total_calories": calories}
-            f.seek(0)
-            json.dump(users, f)
-        
-        # Add the food and calorie information to the listbox
-        self.log_listbox.insert(tk.END, f"{food}: {calories} calories")
-        
-        # Clear the entry fields
-        self.food_entry.delete(0, tk.END)
-        self.calorie_entry.delete(0, tk.END)
-        
-        # Update the progress bar
-        self.update_progress_bar()
+        pass
 
     
     def update_progress_bar(self):
