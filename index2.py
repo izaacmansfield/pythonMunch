@@ -1,5 +1,8 @@
+from tkinter import *
 import tkinter as tk
 import json
+import tkinter.messagebox
+
 
 class CalorieCounterApp(tk.Tk):
     def __init__(self):
@@ -8,6 +11,8 @@ class CalorieCounterApp(tk.Tk):
         self.geometry("400x400")
         self.logged_in = False
         self.username = ""
+
+
         
         # Define the user database filename
         self.user_db_filename = "users.json"
@@ -21,6 +26,13 @@ class CalorieCounterApp(tk.Tk):
         self.username = None
         self.calorie_goal = 2000
         self.logged_calories = 0
+        self.createUsername= StringVar()
+        self.createPassword= StringVar()
+        self.createMail= StringVar()
+        self.createHeight=IntVar()
+        self.createWeight=IntVar()
+
+
 
         # Create login screen
         self.login_frame = tk.Frame(self)
@@ -29,13 +41,46 @@ class CalorieCounterApp(tk.Tk):
         self.password_label = tk.Label(self.login_frame, text="Password:")
         self.password_entry = tk.Entry(self.login_frame, show="*")
         self.login_button = tk.Button(self.login_frame, text="Login", command=self.login)
+        self.Createaccount_button = tk.Button(self.login_frame, text="Create Account", command=self.tocreateaccount)
         
         self.username_label.pack()
         self.username_entry.pack()
         self.password_label.pack()
         self.password_entry.pack()
         self.login_button.pack()
+        self.Createaccount_button.pack()
         self.login_frame.pack()
+
+
+        #Create create account screen
+        self.createAccount_frame = tk.Frame(self)
+        self.CreateUsername_label = tk.Label(self.createAccount_frame, text="Username:")
+        self.CreateUsername_entry = tk.Entry(self.createAccount_frame, textvariable=self.createUsername)
+        self.CreatePassword_label = tk.Label(self.createAccount_frame, text="Password:")
+        self.CreatePassword_entry = tk.Entry(self.createAccount_frame, show="*", textvariable=self.createPassword)
+        self.Createmail_label = tk.Label(self.createAccount_frame, text="Email: ")
+        self.Createmail_entry = tk.Entry(self.createAccount_frame,textvariable=self.createMail)
+        self.Createheight_label = tk.Label(self.createAccount_frame, text="Height")
+        self.Createheight_entry = tk.Entry(self.createAccount_frame, textvariable=self.createHeight)
+        self.Createweight_label = tk.Label(self.createAccount_frame, text="Weight:")
+        self.Createweight_entry = tk.Entry(self.createAccount_frame, textvariable=self.createWeight)
+        self.CreateAccount_button = tk.Button(self.createAccount_frame, text="Create Account", command=self.CreateAccount)
+
+        self.CreateUsername_label.pack()
+        self.CreateUsername_entry.pack()
+        self.CreatePassword_label.pack()
+        self.CreatePassword_entry.pack()
+        self.Createmail_label.pack()
+        self.Createmail_entry.pack()
+        self.Createheight_label.pack()
+        self.Createheight_entry.pack()
+        self.Createweight_label.pack()
+        self.Createweight_entry.pack()
+        self.CreateAccount_button.pack()
+
+
+
+
         
         # Create calorie counter screen
         self.calorie_counter_frame = tk.Frame(self)
@@ -99,6 +144,29 @@ class CalorieCounterApp(tk.Tk):
             self.progress_bar["style"] = "yellow.Horizontal.TProgressbar"
         else:
             self.progress_bar["style"] = "red.Horizontal.TProgressbar"
+
+    def tocreateaccount(self):
+        #shows the create account page
+        self.login_frame.pack_forget()
+        self.createAccount_frame.pack()
+
+    def CreateAccount(self):
+        #saves users credentials and information in the json file
+        if self.createUsername.get() == "" or self.createPassword.get == "" or self.createMail.get()=="" or self.createHeight.get()=="" or self.createWeight.get()=="":
+            tkinter.messagebox.showinfo("Some fields in the form are empty please complete and try again")
+        else:
+            self.users[self.createUsername] = {}
+            self.users[self.createUsername]['Password'] = self.createPassword
+            self.users[self.createUsername]['Email'] = self.createMail
+            self.users[self.createUsername]['Height'] = self.createHeight
+            self.users[self.createUsername]['Weight'] = self.createWeight
+
+            with open('users.json', 'w') as file:
+                json.dump(self.users, file)
+
+
+
+
 
 
     
