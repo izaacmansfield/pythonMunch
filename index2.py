@@ -31,6 +31,8 @@ class CalorieCounterApp(tk.Tk):
         self.createMail= StringVar()
         self.createHeight=IntVar()
         self.createWeight=IntVar()
+        self.createSex=StringVar()
+        self.createAge= IntVar()
 
 
 
@@ -60,6 +62,10 @@ class CalorieCounterApp(tk.Tk):
         self.CreatePassword_entry = tk.Entry(self.createAccount_frame, show="*", textvariable=self.createPassword)
         self.Createmail_label = tk.Label(self.createAccount_frame, text="Email: ")
         self.Createmail_entry = tk.Entry(self.createAccount_frame,textvariable=self.createMail)
+        self.CreateSex_label = tk.Label(self.createAccount_frame, text="Sex: ")
+        self.CreateSex_entry = tk.Entry(self.createAccount_frame, textvariable=self.createSex)
+        self.CreateAge_label = tk.Label(self.createAccount_frame, text="Age: ")
+        self.CreateAge_entry = tk.Entry(self.createAccount_frame, textvariable=self.createAge)
         self.Createheight_label = tk.Label(self.createAccount_frame, text="Height")
         self.Createheight_entry = tk.Entry(self.createAccount_frame, textvariable=self.createHeight)
         self.Createweight_label = tk.Label(self.createAccount_frame, text="Weight:")
@@ -72,6 +78,10 @@ class CalorieCounterApp(tk.Tk):
         self.CreatePassword_entry.pack()
         self.Createmail_label.pack()
         self.Createmail_entry.pack()
+        self.CreateSex_label.pack()
+        self.CreateSex_entry.pack()
+        self.CreateAge_label.pack()
+        self.CreateAge_entry.pack()
         self.Createheight_label.pack()
         self.Createheight_entry.pack()
         self.Createweight_label.pack()
@@ -108,7 +118,7 @@ class CalorieCounterApp(tk.Tk):
         password = self.password_entry.get()
     
         # Check if the username and password are correct
-        if username in users and password == users[username]:
+        if username in users and password == users[username]["Password"]:
             self.logged_in = True
             self.username = username
             self.login_frame.pack_forget() # hide the login screen
@@ -152,17 +162,22 @@ class CalorieCounterApp(tk.Tk):
 
     def CreateAccount(self):
         #saves users credentials and information in the json file
-        if self.createUsername.get() == "" or self.createPassword.get == "" or self.createMail.get()=="" or self.createHeight.get()=="" or self.createWeight.get()=="":
+        if self.createUsername.get() == "" or self.createPassword.get == "" or self.createMail.get()=="" or self.createHeight.get()=="" or self.createWeight.get()=="" or self.createSex=="" or self.createAge=="":
             tkinter.messagebox.showinfo("Some fields in the form are empty please complete and try again")
         else:
-            self.users[self.createUsername] = {}
-            self.users[self.createUsername]['Password'] = self.createPassword
-            self.users[self.createUsername]['Email'] = self.createMail
-            self.users[self.createUsername]['Height'] = self.createHeight
-            self.users[self.createUsername]['Weight'] = self.createWeight
+
+            self.users[self.createUsername.get()] = {}
+            self.users[self.createUsername.get()]['Password'] = self.createPassword.get()
+            self.users[self.createUsername.get()]['Email'] = self.createMail.get()
+            self.users[self.createUsername.get()]['Height'] = self.createHeight.get()
+            self.users[self.createUsername.get()]['Weight'] = self.createWeight.get()
 
             with open('users.json', 'w') as file:
                 json.dump(self.users, file)
+
+            self.createAccount_frame.pack_forget()
+            self.login_frame.pack()
+
 
 
 
