@@ -9,7 +9,7 @@ class CalorieCounterApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Calorie Counter App")
-        self.geometry("400x400")
+        self.geometry("350x550")
         self.logged_in = False
         self.username = ""
 
@@ -120,24 +120,34 @@ class CalorieCounterApp(tk.Tk):
         
         # Create calorie counter screen
         self.calorie_counter_frame = tk.Frame(self)
-        self.food_label = tk.Label(self.calorie_counter_frame, text="Food:")
-        self.food_entry = tk.Entry(self.calorie_counter_frame)
-        self.calories_label = tk.Label(self.calorie_counter_frame, text="Calories:")
+        # self.food_label = tk.Label(self.calorie_counter_frame, text="Food:")
+        # self.food_entry = tk.Entry(self.calorie_counter_frame)
+        self.calories_label = tk.Label(self.calorie_counter_frame, text="Enter Calories:")
+        self.calories_progress_label = tk.Label(self.calorie_counter_frame, text="Make an entry!")
         self.calories_entry = tk.Entry(self.calorie_counter_frame)
         self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories)
         self.progress_bar = ttk.Progressbar(self.calorie_counter_frame, orient="horizontal", length=200, mode="determinate")
-        self.progress_bar.pack()
         self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs)
         self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout)
         
-        self.food_label.pack()
-        self.food_entry.pack()
+        # self.food_label.pack()
+        # self.food_entry.pack()
+        self.calories_progress_label.pack()
+        self.progress_bar.pack()
         self.calories_label.pack()
         self.calories_entry.pack()
         self.log_button.pack()
-        self.progress_bar.pack()
         self.logout_button.pack()
         self.change_preferences_button.pack()
+
+        # self.food_listbox = tk.Listbox(self.calorie_counter_frame, height=10)
+        # self.food_listbox.pack()
+
+        # self.food_scrollbar = tk.Scrollbar(self.calorie_counter_frame)
+        # self.food_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # self.food_listbox.config(yscrollcommand=self.food_scrollbar.set)
+        # self.food_scrollbar.config(command=self.food_listbox.yview)
         
     def login(self):
         with open("users.json") as f:
@@ -195,7 +205,7 @@ class CalorieCounterApp(tk.Tk):
 
         # Update the progress bar value and label
         self.progress_bar["value"] = progress
-        self.calories_label["text"] = f"{self.total_calories}/{self.calorie_goal} calories"
+        self.calories_progress_label["text"] = f"{self.total_calories}/{self.calorie_goal} calories"
 
         # Update the progress bar style based on the percentage of the goal reached
         if progress <= 50:
