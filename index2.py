@@ -53,6 +53,35 @@ class CalorieCounterApp(tk.Tk):
         self.Createaccount_button.pack()
         self.login_frame.pack()
 
+        #Create change preferences screen
+        self.changeprefs_frame = tk.Frame(self)
+        self.Updatemail_label = tk.Label(self.changeprefs_frame, text="Email: ")
+        self.Updatemail_entry = tk.Entry(self.changeprefs_frame,textvariable=self.createMail)
+        self.UpdateSex_label = tk.Label(self.changeprefs_frame, text="Sex: ")
+        self.UpdateSex_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createSex)
+        self.UpdateAge_label = tk.Label(self.changeprefs_frame, text="Age: ")
+        self.UpdateAge_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createAge)
+        self.Updateheight_label = tk.Label(self.changeprefs_frame, text="Height")
+        self.Updateheight_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createHeight)
+        self.Updateweight_label = tk.Label(self.changeprefs_frame, text="Weight:")
+        self.Updateweight_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createWeight)
+        self.Updatecaloriegoal_label = tk.Label(self.changeprefs_frame, text="New Calorie Goal:")
+        self.Updatecaloriegoal_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createWeight)
+        self.Savechanges_button = tk.Button(self.changeprefs_frame, text="Save Changes", command=self.SaveChanges)  
+
+        self.Updatemail_label.pack()
+        self.Updatemail_entry.pack()
+        self.UpdateSex_label.pack()
+        self.UpdateSex_entry.pack()
+        self.UpdateAge_label.pack()
+        self.UpdateAge_entry.pack()
+        self.Updateheight_label.pack()
+        self.Updateheight_entry.pack()
+        self.Updateweight_label.pack()
+        self.Updateweight_entry.pack()
+        self.Updatecaloriegoal_label.pack()
+        self.Updatecaloriegoal_entry.pack()
+        self.Savechanges_button.pack()            
 
         #Create create account screen
         self.createAccount_frame = tk.Frame(self)
@@ -87,10 +116,6 @@ class CalorieCounterApp(tk.Tk):
         self.Createweight_label.pack()
         self.Createweight_entry.pack()
         self.CreateAccount_button.pack()
-
-
-
-
         
         # Create calorie counter screen
         self.calorie_counter_frame = tk.Frame(self)
@@ -100,6 +125,7 @@ class CalorieCounterApp(tk.Tk):
         self.calories_entry = tk.Entry(self.calorie_counter_frame)
         self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories)
         self.progress_bar = tk.Canvas(self.calorie_counter_frame, width=300, height=20)
+        self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs)
         self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout)
         
         self.food_label.pack()
@@ -109,6 +135,7 @@ class CalorieCounterApp(tk.Tk):
         self.log_button.pack()
         self.progress_bar.pack()
         self.logout_button.pack()
+        self.change_preferences_button.pack()
         
     def login(self):
         with open("users.json") as f:
@@ -121,6 +148,7 @@ class CalorieCounterApp(tk.Tk):
         if username in users and password == users[username]["Password"]:
             self.logged_in = True
             self.username = username
+            self.current_user = username
             self.login_frame.pack_forget() # hide the login screen
             self.calorie_counter_frame.pack() # show the calorie counter screen
             self.update_progress_bar() # initialize the progress bar
@@ -136,7 +164,23 @@ class CalorieCounterApp(tk.Tk):
         self.login_frame.pack() # show the login screen
         
     def log_calories(self):
-        pass
+        # Get the current calorie count for the current user
+        current_calories = self.users[self.current_user]["TotalCalories"]
+
+        # Add the new calories to the current count
+        new_calories = int(self.calories_entry.get())
+        total_calories = current_calories + new_calories
+
+        # Update the user's calorie count in the user database
+        self.users[self.current_user]["TotalCalories"] = total_calories
+
+        # Save the updated user database to the file
+        with open(self.user_db_filename, "w") as f:
+            json.dump(self.users, f)
+
+        # Update the progress bar and calories label
+        self.update_progress_bar()
+        
 
     
     def update_progress_bar(self):
@@ -154,6 +198,44 @@ class CalorieCounterApp(tk.Tk):
             self.progress_bar["style"] = "yellow.Horizontal.TProgressbar"
         else:
             self.progress_bar["style"] = "red.Horizontal.TProgressbar"
+
+
+    def tochangeprefs(self):
+        self.calorie_counter_frame.pack_forget()
+        self.changeprefs_frame.pack()
+        self.ChangePrefs()
+    
+    def ChangePrefs(self):
+        with open("users.json") as f:
+            users = json.load(f)
+
+        self.Updatemail_entry.delete(0, tk.END)
+        self.UpdateSex_entry.delete(0,tk.END)
+        self.UpdateAge_entry.delete(0,tk.END)
+        self.Updateheight_entry.delete(0, tk.END)
+        self.Updateweight_entry.delete(0, tk.END)
+        self.Updatecaloriegoal_entry.delete(0, tk.END)
+
+        self.Updatemail_entry.insert(0, self.users[self.current_user]["Email"])
+        self.UpdateSex_entry.insert(0, self.users[self.current_user]["Sex"])
+        self.UpdateAge_entry.insert(0, self.users[self.current_user]["Age"])
+        self.Updateheight_entry.insert(0, self.users[self.current_user]["Height"])
+        self.Updateweight_entry.insert(0, self.users[self.current_user]["Weight"])
+        # self.Updatecaloriegoal_entry.insert(0, self.users[self.current_user]["calorie_goal"])
+
+    def SaveChanges(self):
+        self.users[self.current_user]["Email"] = self.Updatemail_entry.get()
+        self.users[self.current_user]["Sex"] = self.UpdateSex_entry.get()
+        self.users[self.current_user]["Age"] = self.UpdateAge_entry.get()
+        self.users[self.current_user]["Height"] = self.Updateheight_entry.get()
+        self.users[self.current_user]["Weight"] = self.Updateweight_entry.get()
+        self.users[self.current_user]["calorie_goal"] = self.Updatecaloriegoal_entry.get()
+
+        with open('users.json', 'w') as file:
+                json.dump(self.users, file)
+        
+        self.changeprefs_frame.pack_forget()
+        self.calorie_counter_frame.pack()
 
     def tocreateaccount(self):
         #shows the create account page
@@ -178,16 +260,7 @@ class CalorieCounterApp(tk.Tk):
             self.createAccount_frame.pack_forget()
             self.login_frame.pack()
 
-
-
-
-
-
-
     
 if __name__ == "__main__":
     app = CalorieCounterApp()
     app.mainloop()
-
-
-# This is just a basic framework for the app, and you'll need to fill in the details for each of the methods. For example, the login method would need to validate the user's login credentials and set the self.logged_in flag accordingly. The log_calories method would need to read and write to a JSON file to store the logs, and then call the update_progress_bar method to update the progress bar. 
