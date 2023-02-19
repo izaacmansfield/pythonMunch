@@ -66,7 +66,7 @@ class CalorieCounterApp(tk.Tk):
         self.Updateweight_label = tk.Label(self.changeprefs_frame, text="Weight:")
         self.Updateweight_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createWeight)
         self.Updatecaloriegoal_label = tk.Label(self.changeprefs_frame, text="New Calorie Goal:")
-        self.Updatecaloriegoal_entry = tk.Entry(self.changeprefs_frame, textvariable=self.createWeight)
+        self.Updatecaloriegoal_entry = tk.Entry(self.changeprefs_frame, textvariable=self.calorie_goal)
         self.Savechanges_button = tk.Button(self.changeprefs_frame, text="Save Changes", command=self.SaveChanges)  
 
         self.Updatemail_label.pack()
@@ -165,14 +165,16 @@ class CalorieCounterApp(tk.Tk):
         
     def log_calories(self):
         # Get the current calorie count for the current user
-        current_calories = self.users[self.current_user]["TotalCalories"]
+        current_calories = self.users[self.current_user]["total_calories"]
 
         # Add the new calories to the current count
         new_calories = int(self.calories_entry.get())
         total_calories = current_calories + new_calories
 
         # Update the user's calorie count in the user database
-        self.users[self.current_user]["TotalCalories"] = total_calories
+        self.users[self.current_user]["total_calories"] = total_calories
+
+        self.calories_entry.delete(0, tk.END)
 
         # Save the updated user database to the file
         with open(self.user_db_filename, "w") as f:
@@ -185,11 +187,13 @@ class CalorieCounterApp(tk.Tk):
     
     def update_progress_bar(self):
         # Calculate the percentage of the user's calorie goal that has been reached
-        progress = int(self.logged_calories / self.calorie_goal * 100)
+        self.calorie_goal = self.users[self.current_user]["calorie_goal"]
+        self.total_calories = self.users[self.current_user]["total_calories"]
+        progress = int(self.total_calories / self.calorie_goal * 100)
 
         # Update the progress bar value and label
         self.progress_bar["value"] = progress
-        self.calories_label["text"] = f"{self.logged_calories}/{self.calorie_goal} calories"
+        self.calories_label["text"] = f"{self.total_calories}/{self.calorie_goal} calories"
 
         # Update the progress bar style based on the percentage of the goal reached
         if progress <= 50:
@@ -221,7 +225,7 @@ class CalorieCounterApp(tk.Tk):
         self.UpdateAge_entry.insert(0, self.users[self.current_user]["Age"])
         self.Updateheight_entry.insert(0, self.users[self.current_user]["Height"])
         self.Updateweight_entry.insert(0, self.users[self.current_user]["Weight"])
-        # self.Updatecaloriegoal_entry.insert(0, self.users[self.current_user]["calorie_goal"])
+        self.Updatecaloriegoal_entry.insert(0, self.users[self.current_user]["calorie_goal"])
 
     def SaveChanges(self):
         self.users[self.current_user]["Email"] = self.Updatemail_entry.get()
@@ -253,6 +257,15 @@ class CalorieCounterApp(tk.Tk):
             self.users[self.createUsername.get()]['Email'] = self.createMail.get()
             self.users[self.createUsername.get()]['Height'] = self.createHeight.get()
             self.users[self.createUsername.get()]['Weight'] = self.createWeight.get()
+            self.users[self.createUsername.get()]['Sex'] = self.createSex.get()
+            self.users[self.createUsername.get()]['Age'] = self.createAge.get()
+            self.users[self.createUsername.get()]["total_calories"] = 0
+
+            if self.createSex == "male" or self.createSex == "Male":
+               self.users[self.createUsername.get()]['calorie_goal'] = 88.362 + (13.397*self.createWeight.get()) + (4.799*self.createHeight.get()) - (5.677*self.createAge.get())
+            else:
+                self.users[self.createUsername.get()]['calorie_goal'] = 447.593 + (9.247*self.createWeight.get()) + (3.098*self.createHeight.get()) - (4.330*self.createAge.get())
+
 
             with open('users.json', 'w') as file:
                 json.dump(self.users, file)
@@ -260,7 +273,7 @@ class CalorieCounterApp(tk.Tk):
             self.createAccount_frame.pack_forget()
             self.login_frame.pack()
 
-    
+
 if __name__ == "__main__":
     app = CalorieCounterApp()
     app.mainloop()
