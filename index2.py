@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+from tkinter import ttk
 import json
 import tkinter.messagebox
 
@@ -124,7 +125,8 @@ class CalorieCounterApp(tk.Tk):
         self.calories_label = tk.Label(self.calorie_counter_frame, text="Calories:")
         self.calories_entry = tk.Entry(self.calorie_counter_frame)
         self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories)
-        self.progress_bar = tk.Canvas(self.calorie_counter_frame, width=300, height=20)
+        self.progress_bar = ttk.Progressbar(self.calorie_counter_frame, orient="horizontal", length=200, mode="determinate")
+        self.progress_bar.pack()
         self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs)
         self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout)
         
@@ -262,9 +264,9 @@ class CalorieCounterApp(tk.Tk):
             self.users[self.createUsername.get()]["total_calories"] = 0
 
             if self.createSex == "male" or self.createSex == "Male":
-               self.users[self.createUsername.get()]['calorie_goal'] = 88.362 + (13.397*self.createWeight.get()) + (4.799*self.createHeight.get()) - (5.677*self.createAge.get())
+               self.users[self.createUsername.get()]['calorie_goal'] = int(round(88.362 + (13.397*self.createWeight.get()) + (4.799*self.createHeight.get()) - (5.677*self.createAge.get())))
             else:
-                self.users[self.createUsername.get()]['calorie_goal'] = 447.593 + (9.247*self.createWeight.get()) + (3.098*self.createHeight.get()) - (4.330*self.createAge.get())
+                self.users[self.createUsername.get()]['calorie_goal'] = int(round(447.593 + (9.247*self.createWeight.get()) + (3.098*self.createHeight.get()) - (4.330*self.createAge.get())))
 
 
             with open('users.json', 'w') as file:
