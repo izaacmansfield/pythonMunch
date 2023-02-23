@@ -125,7 +125,6 @@ class CalorieCounterApp(tk.Tk):
         self.Createweight_label.grid(row=12, column=0, padx=100, pady=5)
         self.Createweight_entry.grid(row=13, column=0,padx=100, pady=5)
         self.CreateAccount_button.grid(row=14, column=0, padx=100, pady=5)
-        # self.createAccount_frame.grid(padx=100, pady=100)
         
         # Create calorie counter screen
         self.calorie_counter_frame = tk.Frame(self)
@@ -175,14 +174,13 @@ class CalorieCounterApp(tk.Tk):
             self.update_progress_bar() # initialize the progress bar
         else:
             # Display an error message if the username or password is incorrect
-            error_label = tk.Label(self.login_frame, text="Incorrect username or password")
-            error_label.grid()
+            error_label = tkinter.messagebox.showerror(title="Error", message="Incorrect username or password.")
     
     def logout(self):
         self.logged_in = False
         self.username = ""
         self.calorie_counter_frame.grid_forget() # hide the calorie counter screen
-        self.login_frame.grid() # show the login screen
+        self.login_frame.grid(padx=100, pady=100) # show the login screen
         
     def log_calories(self):
         # Get the current calorie count for the current user
@@ -270,7 +268,7 @@ class CalorieCounterApp(tk.Tk):
     def CreateAccount(self):
         #saves users credentials and information in the json file
         if self.createUsername.get() == "" or self.createPassword.get == "" or self.createMail.get()=="" or self.createHeight.get()=="" or self.createWeight.get()=="" or self.createSex=="" or self.createAge=="":
-            tkinter.messagebox.showinfo("Some fields in the form are empty please complete and try again")
+            tkinter.messagebox.showerror(title="Empty Fields", message="Some fields in the form are empty, please complete and try again.")
         else:
 
             self.users[self.createUsername.get()] = {}
