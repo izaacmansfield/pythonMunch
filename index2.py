@@ -57,8 +57,8 @@ class CalorieCounterApp(tk.Tk):
         self.username_entry.grid(row=5, column=2)
         self.password_label.grid(row=6, column=2)
         self.password_entry.grid(row=7, column=2)
-        self.login_button.grid(row=8, column=2, sticky=W)
-        self.Createaccount_button.grid(row=8, column=2, sticky=E)
+        self.login_button.grid(row=9, column=2, pady=10)
+        self.Createaccount_button.grid(row=10, column=2)
         self.login_frame.grid(padx=100, pady=100)
 
         #Create change preferences screen
@@ -93,7 +93,7 @@ class CalorieCounterApp(tk.Tk):
         # self.changeprefs_frame.grid(padx=100, pady=100)         
 
         #Create create account screen
-        self.createAccount_frame = tk.Frame(self)
+        self.createAccount_frame = tk.Frame(self, background="beige")
         self.CreateUsername_label = tk.Label(self.createAccount_frame, text="Username:", background="beige")
         self.CreateUsername_entry = tk.Entry(self.createAccount_frame, textvariable=self.createUsername, justify=CENTER)
         self.CreatePassword_label = tk.Label(self.createAccount_frame, text="Password:", background="beige")
@@ -110,21 +110,21 @@ class CalorieCounterApp(tk.Tk):
         self.Createweight_entry = tk.Entry(self.createAccount_frame, textvariable=self.createWeight, justify=CENTER)
         self.CreateAccount_button = tk.Button(self.createAccount_frame, text="Create Account", command=self.CreateAccount, background="white", activebackground="beige", fg="darkgreen")
 
-        self.CreateUsername_label.grid(row=0, column=0)
-        self.CreateUsername_entry.grid(row=1, column=0)
-        self.CreatePassword_label.grid(row=2, column=0)
-        self.CreatePassword_entry.grid(row=3, column=0)
-        self.Createmail_label.grid(row=4, column=0)
-        self.Createmail_entry.grid(row=5, column=0)
-        self.CreateSex_label.grid(row=6, column=0)
-        self.CreateSex_entry.grid(row=7, column=0)
-        self.CreateAge_label.grid(row=8, column=0)
-        self.CreateAge_entry.grid(row=9, column=0)
-        self.Createheight_label.grid(row=10, column=0)
-        self.Createheight_entry.grid(row=11, column=0)
-        self.Createweight_label.grid(row=12, column=0)
-        self.Createweight_entry.grid(row=13, column=0)
-        self.CreateAccount_button.grid(row=14, column=0)
+        self.CreateUsername_label.grid(row=0, column=2, padx=100)
+        self.CreateUsername_entry.grid(row=1, column=2, padx=100)
+        self.CreatePassword_label.grid(row=2, column=2, padx=100)
+        self.CreatePassword_entry.grid(row=3, column=2, padx=100)
+        self.Createmail_label.grid(row=4, column=2, padx=100)
+        self.Createmail_entry.grid(row=5, column=2, padx=100)
+        self.CreateSex_label.grid(row=6, column=2, padx=100)
+        self.CreateSex_entry.grid(row=7, column=2, padx=100)
+        self.CreateAge_label.grid(row=8, column=2, padx=100)
+        self.CreateAge_entry.grid(row=9, column=2, padx=100)
+        self.Createheight_label.grid(row=10, column=2, padx=100)
+        self.Createheight_entry.grid(row=11, column=2, padx=100)
+        self.Createweight_label.grid(row=12, column=2, padx=100)
+        self.Createweight_entry.grid(row=13, column=2, padx=100)
+        self.CreateAccount_button.grid(row=14, column=2, padx=100, pady=10)
         # self.createAccount_frame.grid(padx=100, pady=100)
         
         # Create calorie counter screen
@@ -175,14 +175,13 @@ class CalorieCounterApp(tk.Tk):
             self.update_progress_bar() # initialize the progress bar
         else:
             # Display an error message if the username or password is incorrect
-            error_label = tk.Label(self.login_frame, text="Incorrect username or password")
-            error_label.grid()
+            error_label = tkinter.messagebox.showerror(title="Error", message="Incorrect username or password.")
     
     def logout(self):
         self.logged_in = False
         self.username = ""
         self.calorie_counter_frame.grid_forget() # hide the calorie counter screen
-        self.login_frame.grid() # show the login screen
+        self.login_frame.grid(padx=100, pady=100) # show the login screen
         
     def log_calories(self):
         # Get the current calorie count for the current user
@@ -270,7 +269,7 @@ class CalorieCounterApp(tk.Tk):
     def CreateAccount(self):
         #saves users credentials and information in the json file
         if self.createUsername.get() == "" or self.createPassword.get == "" or self.createMail.get()=="" or self.createHeight.get()=="" or self.createWeight.get()=="" or self.createSex=="" or self.createAge=="":
-            tkinter.messagebox.showinfo("Some fields in the form are empty please complete and try again")
+            tkinter.messagebox.showerror(title="Empty Fields", message="Some fields in the form are empty, please complete and try again.")
         else:
 
             self.users[self.createUsername.get()] = {}
