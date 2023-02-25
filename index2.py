@@ -58,7 +58,7 @@ class CalorieCounterApp(tk.Tk):
         self.password_label.grid(row=6, column=2)
         self.password_entry.grid(row=7, column=2)
         self.login_button.grid(row=8, column=2, pady=10)
-        self.Createaccount_button.grid(row=10, column=2, pady=10)
+        self.Createaccount_button.grid(row=10, column=2, pady=5)
         self.login_frame.grid(padx=100, pady=100)
 
         #Create change preferences screen
@@ -77,19 +77,19 @@ class CalorieCounterApp(tk.Tk):
         self.Updatecaloriegoal_entry = tk.Entry(self.changeprefs_frame, textvariable=self.calorie_goal, justify=CENTER)
         self.Savechanges_button = tk.Button(self.changeprefs_frame, text="Save Changes", command=self.SaveChanges, background="white", activebackground="beige", fg="darkgreen")  
 
-        self.Updatemail_label.grid(column=1)
-        self.Updatemail_entry.grid(column=1)
-        self.UpdateSex_label.grid(column=1)
-        self.UpdateSex_entry.grid(column=1)
-        self.UpdateAge_label.grid(column=1)
-        self.UpdateAge_entry.grid(column=1)
-        self.Updateheight_label.grid(column=1)
-        self.Updateheight_entry.grid(column=1)
-        self.Updateweight_label.grid(column=1)
-        self.Updateweight_entry.grid(column=1)
-        self.Updatecaloriegoal_label.grid(column=1)
-        self.Updatecaloriegoal_entry.grid(column=1)
-        self.Savechanges_button.grid(column=1)   
+        self.Updatemail_label.grid(row=0, column=1, padx=100)
+        self.Updatemail_entry.grid(row=1, column=1, padx=100)
+        self.UpdateSex_label.grid(row=2, column=1, padx=100)
+        self.UpdateSex_entry.grid(row=3, column=1, padx=100)
+        self.UpdateAge_label.grid(row=4, column=1, padx=100)
+        self.UpdateAge_entry.grid(row=5, column=1, padx=100)
+        self.Updateheight_label.grid(row=6, column=1, padx=100)
+        self.Updateheight_entry.grid(row=7, column=1, padx=100)
+        self.Updateweight_label.grid(row=8, column=1, padx=100)
+        self.Updateweight_entry.grid(row=9, column=1, padx=100)
+        self.Updatecaloriegoal_label.grid(row=10, column=1, padx=100)
+        self.Updatecaloriegoal_entry.grid(row=11, column=1, padx=100)
+        self.Savechanges_button.grid(row=12, column=1, padx=100, pady=5)   
         # self.changeprefs_frame.grid(padx=100, pady=100)         
 
         #Create create account screen
@@ -104,13 +104,15 @@ class CalorieCounterApp(tk.Tk):
         self.CreateSex_entry = tk.Entry(self.createAccount_frame, textvariable=self.createSex, justify=CENTER)
         self.CreateAge_label = tk.Label(self.createAccount_frame, text="Age: ", background="beige")
         self.CreateAge_entry = tk.Entry(self.createAccount_frame, textvariable=self.createAge, justify=CENTER)
-        self.Createheight_label = tk.Label(self.createAccount_frame, text="Height in Cm", background="beige")
+        self.Createheight_label = tk.Label(self.createAccount_frame, text="Height in Cm:", background="beige")
         self.Createheight_entry = tk.Entry(self.createAccount_frame, textvariable=self.createHeight, justify=CENTER)
         self.Createweight_label = tk.Label(self.createAccount_frame, text="Weight in Kg:", background="beige")
         self.Createweight_entry = tk.Entry(self.createAccount_frame, textvariable=self.createWeight, justify=CENTER)
         self.CreateAccount_button = tk.Button(self.createAccount_frame, text="Create Account", command=self.CreateAccount, background="white", activebackground="beige", fg="darkgreen")
+        self.GoBack_button = tk.Button(self.createAccount_frame, text="Go Back", command=self.tologinpage, background="white", activebackground="beige", fg="darkgreen")
 
-        self.CreateUsername_label.grid(row=0, column=0, padx=100, pady=5 )
+
+        self.CreateUsername_label.grid(row=0, column=0, padx=100, pady=5)
         self.CreateUsername_entry.grid(row=1, column=0, padx=100, pady=5)
         self.CreatePassword_label.grid(row=2, column=0, padx=100, pady=5)
         self.CreatePassword_entry.grid(row=3, column=0, padx=100, pady=5)
@@ -125,28 +127,31 @@ class CalorieCounterApp(tk.Tk):
         self.Createweight_label.grid(row=12, column=0, padx=100, pady=5)
         self.Createweight_entry.grid(row=13, column=0,padx=100, pady=5)
         self.CreateAccount_button.grid(row=14, column=0, padx=100, pady=5)
+        self.GoBack_button.grid(row=15, column=0, padx=100, pady=5)
         
         # Create calorie counter screen
-        self.calorie_counter_frame = tk.Frame(self)
+        self.calorie_counter_frame = tk.Frame(self, bg="beige")
         # self.food_label = tk.Label(self.calorie_counter_frame, text="Food:")
         # self.food_entry = tk.Entry(self.calorie_counter_frame)
-        self.calories_label = tk.Label(self.calorie_counter_frame, text="Enter Calories:")
-        self.calories_progress_label = tk.Label(self.calorie_counter_frame, text="Make an entry!")
+        self.calories_label = tk.Label(self.calorie_counter_frame, text="Enter Calories:", bg="beige")
+        self.calories_progress_label = tk.Label(self.calorie_counter_frame, text="Make an entry!", bg="beige")
         self.calories_entry = tk.Entry(self.calorie_counter_frame)
-        self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories)
+        self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories, fg="darkgreen", background="white", activebackground="beige")
         self.progress_bar = ttk.Progressbar(self.calorie_counter_frame, orient="horizontal", length=200, mode="determinate")
-        self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs)
-        self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout)
-        
+        self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs, fg="darkgreen", background="white", activebackground="beige")
+        self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout, fg="darkgreen", background="white", activebackground="beige")
+        self.clear_calories_button = tk.Button(self.calorie_counter_frame, text="Clear Calories", command=self.clear_calories, fg="darkgreen", background="white", activebackground="beige")
         # self.food_label.grid()
         # self.food_entry.grid()
-        self.calories_progress_label.grid()
-        self.progress_bar.grid()
-        self.calories_label.grid()
-        self.calories_entry.grid()
-        self.log_button.grid()
-        self.logout_button.grid()
-        self.change_preferences_button.grid()
+        self.calories_progress_label.grid(row=0, column=0, padx=75, pady=5)
+        self.progress_bar.grid(row=1, column=0, padx=75, pady=5)
+        self.calories_label.grid(row=2, column=0, padx=75, pady=5)
+        self.calories_entry.grid(row=3, column=0, padx=75, pady=5)
+        self.log_button.grid(row=4, column=0, padx=75, pady=5)
+        self.change_preferences_button.grid(row=5, column=0, padx=75, pady=5)
+        self.clear_calories_button.grid(row=6, column=0, padx=75, pady=5)
+        self.logout_button.grid(row=7, column=0, padx=75, pady=5)
+
 
         # self.food_listbox = tk.Listbox(self.calorie_counter_frame, height=10)
         # self.food_listbox.grid()
@@ -202,12 +207,14 @@ class CalorieCounterApp(tk.Tk):
         # Update the progress bar and calories label
         self.update_progress_bar()
         
-
+    def clear_calories(self):
+        self.users[self.current_user]["total_calories"] = 0
+        self.update_progress_bar()
     
     def update_progress_bar(self):
         # Calculate the percentage of the user's calorie goal that has been reached
-        self.calorie_goal = self.users[self.current_user]["calorie_goal"]
-        self.total_calories = self.users[self.current_user]["total_calories"]
+        self.calorie_goal = int(self.users[self.current_user]["calorie_goal"])
+        self.total_calories = int(self.users[self.current_user]["total_calories"])
         progress = int(self.total_calories / self.calorie_goal * 100)
 
         # Update the progress bar value and label
@@ -225,7 +232,7 @@ class CalorieCounterApp(tk.Tk):
 
     def tochangeprefs(self):
         self.calorie_counter_frame.grid_forget()
-        self.changeprefs_frame.grid()
+        self.changeprefs_frame.grid(padx=10, pady=100)
         self.ChangePrefs()
     
     def ChangePrefs(self):
@@ -265,6 +272,10 @@ class CalorieCounterApp(tk.Tk):
         self.login_frame.grid_forget()
         self.createAccount_frame.grid()
 
+    def tologinpage(self):
+        self.createAccount_frame.grid_forget()
+        self.login_frame.grid(padx=100, pady=100)
+
     def CreateAccount(self):
         #saves users credentials and information in the json file
         if self.createUsername.get() == "" or self.createPassword.get == "" or self.createMail.get()=="" or self.createHeight.get()=="" or self.createWeight.get()=="" or self.createSex=="" or self.createAge=="":
@@ -290,7 +301,7 @@ class CalorieCounterApp(tk.Tk):
                 json.dump(self.users, file)
 
             self.createAccount_frame.grid_forget()
-            self.login_frame.grid()
+            self.login_frame.grid(padx=100, pady=100)
 
 
 if __name__ == "__main__":
