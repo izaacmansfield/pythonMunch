@@ -18,10 +18,15 @@ class CalorieCounterApp(tk.Tk):
         
         # Define the user database filename
         self.user_db_filename = "users.json"
+        self.food_db_filename = "recentFoods.json"
 
         # Load the user database
         with open(self.user_db_filename, "r") as f:
             self.users = json.load(f)
+
+        #with open(self.food_db_filename, "r") as p:
+            #self.food = json.load(p)
+
 
         # Define the current user variable
         self.current_user = ""
@@ -34,7 +39,8 @@ class CalorieCounterApp(tk.Tk):
         self.createHeight=IntVar()
         self.createWeight=IntVar()
         self.createSex=StringVar()
-        self.createAge= IntVar()
+        self.createAge = IntVar()
+        self.foodName = StringVar()
 
 
 
@@ -134,9 +140,14 @@ class CalorieCounterApp(tk.Tk):
         # self.food_label = tk.Label(self.calorie_counter_frame, text="Food:")
         # self.food_entry = tk.Entry(self.calorie_counter_frame)
         self.calories_label = tk.Label(self.calorie_counter_frame, text="Enter Calories:", bg="beige")
+        self.foodName_label = tk.Label(self.calorie_counter_frame, text = "Enter Food Name", bg="beige")
         self.calories_progress_label = tk.Label(self.calorie_counter_frame, text="Make an entry!", bg="beige")
         self.calories_entry = tk.Entry(self.calorie_counter_frame)
+        self.foodEntry = tk.Entry(self.calorie_counter_frame, textvariable=self.foodName)
         self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories, fg="darkgreen", background="white", activebackground="beige")
+        self.recent_foods_label = tk.Label(self.calorie_counter_frame, text="Recently Used Foods:", bg="beige")
+        self.food_list = Listbox(self.calorie_counter_frame, width = 30, height = 6)
+        #self.food_list.bind('<Double-Button-1>', add_food)
         self.progress_bar = ttk.Progressbar(self.calorie_counter_frame, orient="horizontal", length=200, mode="determinate")
         self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs, fg="darkgreen", background="white", activebackground="beige")
         self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout, fg="darkgreen", background="white", activebackground="beige")
@@ -145,12 +156,16 @@ class CalorieCounterApp(tk.Tk):
         # self.food_entry.grid()
         self.calories_progress_label.grid(row=0, column=0, padx=75, pady=5)
         self.progress_bar.grid(row=1, column=0, padx=75, pady=5)
-        self.calories_label.grid(row=2, column=0, padx=75, pady=5)
-        self.calories_entry.grid(row=3, column=0, padx=75, pady=5)
-        self.log_button.grid(row=4, column=0, padx=75, pady=5)
-        self.change_preferences_button.grid(row=5, column=0, padx=75, pady=5)
-        self.clear_calories_button.grid(row=6, column=0, padx=75, pady=5)
-        self.logout_button.grid(row=7, column=0, padx=75, pady=5)
+        self.calories_label.grid(row=4, column=0, padx=75)
+        self.foodName_label.grid(row=2, column=0, padx=75)
+        self.calories_entry.grid(row=5, column=0, padx=75, pady=5)
+        self.foodEntry.grid(row=3, column=0, padx=75, pady=5)
+        self.log_button.grid(row=6, column=0, padx=75, pady=5)
+        self.recent_foods_label.grid(row=7, column=0, padx=75, pady=5)
+        self.food_list.grid(row=8, column=0, padx=75, pady=5)
+        self.change_preferences_button.grid(row=9, column=0, padx=75, pady=5)
+        self.clear_calories_button.grid(row=10, column=0, padx=75, pady=5)
+        self.logout_button.grid(row=11, column=0, padx=75, pady=5)
 
 
         # self.food_listbox = tk.Listbox(self.calorie_counter_frame, height=10)
@@ -199,6 +214,8 @@ class CalorieCounterApp(tk.Tk):
         self.users[self.current_user]["total_calories"] = total_calories
 
         self.calories_entry.delete(0, tk.END)
+        self.foodEntry.delete(0, tk.END)
+
 
         # Save the updated user database to the file
         with open(self.user_db_filename, "w") as f:
@@ -206,6 +223,7 @@ class CalorieCounterApp(tk.Tk):
 
         # Update the progress bar and calories label
         self.update_progress_bar()
+        self.addFoodtoList()
         
     def clear_calories(self):
         self.users[self.current_user]["total_calories"] = 0
@@ -302,6 +320,24 @@ class CalorieCounterApp(tk.Tk):
 
             self.createAccount_frame.grid_forget()
             self.login_frame.grid(padx=100, pady=100)
+
+
+    def addFoodtoList(self):
+
+
+        if self.foodName.get() == "" or self.calories_entry.get == "":
+            tkinter.messagebox.showerror(title="Empty Fields", message="Some fields in the form are empty, please complete and try again.")     
+        else:  
+            self.food[self.foodName.get()] = {}
+            self.food[self.foodName.get()]['Calories'] = self.calories_entry.get()
+
+            #with open('food_class.json', 'w') as file:
+                #json.dump(self.food, file)
+
+            print(self.food)
+
+        self.food_list.insert(END, self.food)
+
 
 
 if __name__ == "__main__":
