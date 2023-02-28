@@ -251,6 +251,10 @@ class CalorieCounterApp(tk.Tk):
     def clear_calories(self):
         self.users[self.current_user]["total_calories"] = 0
         self.update_progress_bar()
+        self.calories_entry.delete(0, END)
+        self.foodEntry.delete(0, END)
+        self.calories_entry.insert(0, '0')
+        
     
     def update_progress_bar(self):
         # Calculate the percentage of the user's calorie goal that has been reached
