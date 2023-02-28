@@ -4,7 +4,7 @@ from tkinter import ttk
 import json
 import tkinter.messagebox
 import collections
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 
 
 
@@ -297,16 +297,16 @@ class CalorieCounterApp(tk.Tk):
         self.Updatemail_entry.insert(0, self.users[self.current_user]["Email"])
         self.UpdateSex_entry.insert(0, self.users[self.current_user]["Sex"])
         self.UpdateAge_entry.insert(0, self.users[self.current_user]["Age"])
-        self.Updateheight_entry.insert(0, self.users[self.current_user]["Height in Cm"])
-        self.Updateweight_entry.insert(0, self.users[self.current_user]["Weight in Kg"])
+        self.Updateheight_entry.insert(0, self.users[self.current_user]["Height"])
+        self.Updateweight_entry.insert(0, self.users[self.current_user]["Weight"])
         self.Updatecaloriegoal_entry.insert(0, self.users[self.current_user]["calorie_goal"])
 
     def SaveChanges(self):
         self.users[self.current_user]["Email"] = self.Updatemail_entry.get()
         self.users[self.current_user]["Sex"] = self.UpdateSex_entry.get()
         self.users[self.current_user]["Age"] = self.UpdateAge_entry.get()
-        self.users[self.current_user]["Height in Cm"] = self.Updateheight_entry.get()
-        self.users[self.current_user]["Weight in Kg"] = self.Updateweight_entry.get()
+        self.users[self.current_user]["Height"] = self.Updateheight_entry.get()
+        self.users[self.current_user]["Weight"] = self.Updateweight_entry.get()
         self.users[self.current_user]["calorie_goal"] = self.Updatecaloriegoal_entry.get()
 
         with open('users.json', 'w') as file:
