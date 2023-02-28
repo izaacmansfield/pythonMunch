@@ -25,7 +25,7 @@ class CalorieCounterApp(tk.Tk):
             self.users = json.load(f)
 
         with open('recentFoods.json', 'r') as p:
-            self.food = json.load(p)
+           self.food = json.load(p)
 
         #with open(self.food_db_filename, "r") as p:
             #self.food = json.load(p)
@@ -36,7 +36,7 @@ class CalorieCounterApp(tk.Tk):
         self.username = None
         self.calorie_goal = 2000
         self.logged_calories = 0
-        self.food= {}
+        #self.food= {}
         self.createUsername= StringVar()
         self.createPassword= StringVar()
         self.createMail= StringVar()
@@ -198,6 +198,10 @@ class CalorieCounterApp(tk.Tk):
             self.login_frame.grid_forget() # hide the login screen
             self.calorie_counter_frame.grid() # show the calorie counter screen
             self.update_progress_bar() # initialize the progress bar
+            self.foods = self.food[self.current_user]['Foods']
+            self.food_list.insert(0, self.foods)
+
+
 
 
         else:
@@ -209,6 +213,7 @@ class CalorieCounterApp(tk.Tk):
         self.username = ""
         self.calorie_counter_frame.grid_forget() # hide the calorie counter screen
         self.login_frame.grid(padx=100, pady=100) # show the login screen
+        self.foods=list()
         
     def log_calories(self):
         # Get the current calorie count for the current user
@@ -314,6 +319,8 @@ class CalorieCounterApp(tk.Tk):
             self.users[self.createUsername.get()]['Sex'] = self.createSex.get()
             self.users[self.createUsername.get()]['Age'] = self.createAge.get()
             self.users[self.createUsername.get()]["total_calories"] = 0
+            self.food[self.createUsername.get()] = {'Foods':[]}
+
 
             if self.createSex == "male" or self.createSex == "Male":
                self.users[self.createUsername.get()]['calorie_goal'] = int(round(88.362 + (13.397*self.createWeight.get()) + (4.799*self.createHeight.get()) - (5.677*self.createAge.get())))
@@ -334,10 +341,11 @@ class CalorieCounterApp(tk.Tk):
         if self.foodName.get() == "" or self.food_calorie.get() == "":
             tkinter.messagebox.showerror(title="Empty Fields", message="Some fields in the form are empty, please complete and try again.")     
         else:
-            self.foods= (self.food[self.current_user]['Foods'])
-            self.foods.append((self.foodName.get(), self.food_calorie.get()))
-            self.food[self.current_user]= collections.defaultdict(list)
+            #self.foods = self.food[self.current_user]['Foods']
+            self.foods.append((self.foodName.get(),self.food_calorie.get()))
+            self.food[self.current_user]['Foods']=[]
             self.food[self.current_user]['Foods'].append(self.foods)
+            self.food_list.insert(0,f'{self.foodName.get()} - {self.food_calorie.get()}')
 
             with open('recentFoods.json','w') as file:
                 json.dump(self.food, file)
