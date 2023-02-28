@@ -6,6 +6,8 @@ import tkinter.messagebox
 import collections
 
 
+
+
 class CalorieCounterApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -47,6 +49,8 @@ class CalorieCounterApp(tk.Tk):
         self.foodName = StringVar()
         self.food_calorie = IntVar()
         self.foods= list()
+        self.foodList = list()
+
 
 
 
@@ -153,7 +157,7 @@ class CalorieCounterApp(tk.Tk):
         self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories, fg="darkgreen", background="white", activebackground="beige")
         self.recent_foods_label = tk.Label(self.calorie_counter_frame, text="Recently Used Foods:", bg="beige")
         self.food_list = Listbox(self.calorie_counter_frame, width = 30, height = 6)
-        #self.food_list.bind('<Double-Button-1>', add_food)
+        self.food_list.bind('<Double-Button-1>', addCaloriesfromList)
         self.progress_bar = ttk.Progressbar(self.calorie_counter_frame, orient="horizontal", length=200, mode="determinate")
         self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs, fg="darkgreen", background="white", activebackground="beige")
         self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout, fg="darkgreen", background="white", activebackground="beige")
@@ -198,8 +202,7 @@ class CalorieCounterApp(tk.Tk):
             self.login_frame.grid_forget() # hide the login screen
             self.calorie_counter_frame.grid() # show the calorie counter screen
             self.update_progress_bar() # initialize the progress bar
-            self.foods = self.food[self.current_user]['Foods']
-            self.food_list.insert(0, self.foods)
+            self.foods = self.food[self.current_user]
 
 
 
@@ -319,7 +322,7 @@ class CalorieCounterApp(tk.Tk):
             self.users[self.createUsername.get()]['Sex'] = self.createSex.get()
             self.users[self.createUsername.get()]['Age'] = self.createAge.get()
             self.users[self.createUsername.get()]["total_calories"] = 0
-            self.food[self.createUsername.get()] = {'Foods':[]}
+            self.food[self.createUsername.get()] = []
 
 
             if self.createSex == "male" or self.createSex == "Male":
@@ -336,19 +339,44 @@ class CalorieCounterApp(tk.Tk):
 
 
     def addFoodtoList(self):
-
-
         if self.foodName.get() == "" or self.food_calorie.get() == "":
             tkinter.messagebox.showerror(title="Empty Fields", message="Some fields in the form are empty, please complete and try again.")     
         else:
-            #self.foods = self.food[self.current_user]['Foods']
-            self.foods.append((self.foodName.get(),self.food_calorie.get()))
-            self.food[self.current_user]['Foods']=[]
-            self.food[self.current_user]['Foods'].append(self.foods)
+            self.food[self.current_user] = self.foods
+            #self.foods.append((self.foodName.get(),self.food_calorie.get()))
+            self.food[self.current_user].insert(0,{self.foodName.get(): self.food_calorie.get()})
+            #self.food[self.current_user]['Foods'].append(self.foods)
             self.food_list.insert(0,f'{self.foodName.get()} - {self.food_calorie.get()}')
+            self.foodList.insert(0,self.foodName.get())
 
             with open('recentFoods.json','w') as file:
                 json.dump(self.food, file)
+
+def addCaloriesfromList(event):
+    foodIndex = self.food_list.curselection()
+    calorieAmount = self.food[self.current_user][foodIndex][self.foodList[foodIndex]]
+
+    current_calories = self.users[self.current_user]["total_calories"]
+
+    # Add the new calories to the current count
+    new_ListCalories = int(calorieAmount)
+    total_calories = current_calories + new_ListCalories
+
+    # Update the user's calorie count in the user database
+    self.users[self.current_user]["total_calories"] = total_calories
+
+
+
+    # Save the updated user database to the file
+    with open(self.user_db_filename, "w") as f:
+        json.dump(self.users, f)
+
+    # Update the progress bar and calories label
+    self.update_progress_bar()
+
+
+
+
 
 
 
