@@ -4,6 +4,7 @@ from tkinter import ttk
 import json
 import tkinter.messagebox
 import collections
+from PIL import ImageTk, Image
 
 
 
@@ -17,7 +18,7 @@ class CalorieCounterApp(tk.Tk):
         self.logged_in = False
         self.username = ""
 
-
+        self.iconbitmap('foodicon.ico')
         
         # Define the user database filename
         self.user_db_filename = "users.json"
@@ -67,6 +68,14 @@ class CalorieCounterApp(tk.Tk):
         self.login_button = tk.Button(self.login_frame, text="Login", command=self.login, fg="darkgreen", height=2, width=5, bg="white", activebackground="beige")
         self.Createaccount_button = tk.Button(self.login_frame, text="Create Account", command=self.tocreateaccount, fg="darkgreen", height=2, bg="white", activebackground="beige")
         
+        # logo = Image.open('munchlogo2.png')
+        # new_width = 200
+        # new_height = 150
+        # img = logo.resize((new_width, new_height))
+        # logo = ImageTk.PhotoImage(img)
+        # logo_label = Label(self.login_frame, image=logo)
+        # logo_label.grid(padx=5, pady=5)
+
         self.welcome_label.grid(row=0, column=2)
         self.welcome_label2.grid(row=2, column=2)
         self.username_label.grid(row=4, column=2)
@@ -75,7 +84,7 @@ class CalorieCounterApp(tk.Tk):
         self.password_entry.grid(row=7, column=2)
         self.login_button.grid(row=8, column=2, pady=10)
         self.Createaccount_button.grid(row=10, column=2, pady=5)
-        self.login_frame.grid(padx=100, pady=100)
+        self.login_frame.grid(padx=100, pady=20)
 
         #Create change preferences screen
         self.changeprefs_frame = tk.Frame(self, background="beige")
