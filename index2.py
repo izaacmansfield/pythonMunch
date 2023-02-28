@@ -166,7 +166,7 @@ class CalorieCounterApp(tk.Tk):
         self.log_button = tk.Button(self.calorie_counter_frame, text="Log", command=self.log_calories, fg="darkgreen", background="white", activebackground="beige")
         self.recent_foods_label = tk.Label(self.calorie_counter_frame, text="Recently Used Foods:", bg="beige")
         self.food_list = Listbox(self.calorie_counter_frame, width = 30, height = 6)
-        self.food_list.bind('<Double-Button-1>', addCaloriesfromList)
+        #self.food_list.bind('<Double-Button-1>', addCaloriesfromList)
         self.progress_bar = ttk.Progressbar(self.calorie_counter_frame, orient="horizontal", length=200, mode="determinate")
         self.change_preferences_button = Button(self.calorie_counter_frame, text="Change Preferences", command=self.tochangeprefs, fg="darkgreen", background="white", activebackground="beige")
         self.logout_button = tk.Button(self.calorie_counter_frame, text="Logout", command=self.logout, fg="darkgreen", background="white", activebackground="beige")
@@ -211,7 +211,9 @@ class CalorieCounterApp(tk.Tk):
             self.login_frame.grid_forget() # hide the login screen
             self.calorie_counter_frame.grid() # show the calorie counter screen
             self.update_progress_bar() # initialize the progress bar
-            self.foods = self.food[self.current_user]
+            self.foodName.set('')
+            self.food_calorie.set('')
+            #self.foods = self.food[self.current_user]
 
 
 
@@ -226,6 +228,7 @@ class CalorieCounterApp(tk.Tk):
         self.calorie_counter_frame.grid_forget() # hide the calorie counter screen
         self.login_frame.grid(padx=100, pady=100) # show the login screen
         self.foods=list()
+        self.food_list.delete(0,END)
         
     def log_calories(self):
         # Get the current calorie count for the current user
@@ -365,27 +368,7 @@ class CalorieCounterApp(tk.Tk):
             with open('recentFoods.json','w') as file:
                 json.dump(self.food, file)
 
-def addCaloriesfromList(event):
-    foodIndex = self.food_list.curselection()
-    calorieAmount = self.food[self.current_user][foodIndex][self.foodList[foodIndex]]
 
-    current_calories = self.users[self.current_user]["total_calories"]
-
-    # Add the new calories to the current count
-    new_ListCalories = int(calorieAmount)
-    total_calories = current_calories + new_ListCalories
-
-    # Update the user's calorie count in the user database
-    self.users[self.current_user]["total_calories"] = total_calories
-
-
-
-    # Save the updated user database to the file
-    with open(self.user_db_filename, "w") as f:
-        json.dump(self.users, f)
-
-    # Update the progress bar and calories label
-    self.update_progress_bar()
 
 
 
